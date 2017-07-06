@@ -1,5 +1,5 @@
 app.factory('beerFactory', function ($http) {
-    
+
     var getBeers = function () {
         return $http.get('http://localhost:8000/beers')
             .then(function (response) {
@@ -18,8 +18,15 @@ app.factory('beerFactory', function ($http) {
                 return;
             });
     }
+    var addRating = function (id, rating) {
+        return $http.post('/beers/'+ id + '/ratings', {rating: rating})
+            .then(function (response) {
+                return angular.copy(response.data)
+            });
+    }
     return {
         getBeers: getBeers,
+        addRating: addRating,
         addBeer: addBeer,
         removeBeer: removeBeer
 

@@ -29,13 +29,54 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Add</button>
                 </form>
+                <div>
+                    <div class="page-header">
+                    </div>
+                    <h4>Sort by: {{order.type}}</h4>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" ng-click="order.type==='name'? order.type = '-name': order.type = 'name'">name</button>
+                        <button type="button" class="btn btn-primary" ng-click="order.type==='average'? order.type='-average': order.type='average'">rating</button>
+                        <button type="button" class="btn btn-primary" ng-click="order.type==='abv'? order.type='-abv': order.type='abv'">ABV</button>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 beer-box" ng-repeat="beer in beers">
+            <div class="col-md-4 beer-box" ng-repeat="beer in beers | orderBy: order.type">
                 <section>
-                    <button type="button" class="btn btn-danger pull-right" ng-click="removeBeer(beer)">Remove </button>
-                    <h3>{{beer.name}}, <small>{{beer.style}}</small></h3> 
-                    <small>{{beer.abv}}%</small>
-                    <img class="beerImages" ng-src="{{beer.image_url}}">
+                    <div class="page-header">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 rating">
+                            <div class="row">
+                                <!--Star Rating start-->
+                                <select ng-model="rating">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+
+                                <!--Star Rating end-->
+                            </div>
+                            <div class="row">
+                                <button class="btn-primary" ng-click="addRating(beer._id, rating)">Add rating </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h3>{{beer.name}}, <small>{{beer.style}}</small></h3>
+                            <small>{{beer.abv}}%</small>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-danger pull-right" ng-click="removeBeer(beer)">Remove </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <img class="beerImages" ng-src="{{beer.image_url}}">
+                    </div>
+                    <div class="row">
+                        <h5 ng-show="beer.average">Rating: {{beer.average}}</h5>
+                        <h5 ng-hide="beer.average">this beer havn't been rated yet</h5>
+                    </div>
                 </section>
             </div>
         </div>

@@ -1,7 +1,11 @@
 .beerImages {
-    width: 100%;
-    height: 375px;
+    margin: auto;
+        width: 62%;
+    height: 292px;
 }
 .beer-box {
     text-align: center;
+}
+select {
+        width: 79px;
 }

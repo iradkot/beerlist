@@ -61,7 +61,7 @@ app.post('/beers/:id/ratings', function(req, res, next) {
     //using req.body to retrieve the new rating
     var updateObject = {$push: { ratings: req.body.rating }}; 
   
-    Beer.findByIdAndUpdate(req.param.id, updateObject, { new: true }, function(err, beer) {
+    Beer.findByIdAndUpdate(req.params.id, updateObject, { new: true }, function(err, beer) {
         if (err) {
             return next(err);
         } else {
