@@ -80,7 +80,23 @@
                     </div>
                 </section>
                 <section class="edit-beer" ng-hide="beer.edit.show">
-                    <button type="button" class="btn btn-warning pull-right" ng-click="beer.edit.clicked()">Edit Beer </button>
+                    <div class="page-header">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 rating">
+                            <button type="button" class="btn btn-basic" ng-click="beer.edit.clicked()">Back </button>
+                            <form>
+                                 <label>image url</label>
+                                <textarea rows="3" cols="40" id="cost_text" value="{{beer.image_url}}">{{beer.image_url}}</textarea>
+                                <label>name</label>
+                                <input type="text" value="{{beer.name}}">
+                                <label>style</label>
+                                <input type="text" value="{{beer.style}}">
+                                <label>abv</label>
+                                <input type="text" value="{{beer.abv}}">
+                            </form>
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>
