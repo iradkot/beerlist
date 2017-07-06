@@ -1,6 +1,11 @@
 app.controller('mainController', function ($scope, beerFactory) {
-    $scope.order = {type: 'name'};
-
+    $scope.order = { type: 'name' };
+    var edit = {};
+    $scope.edit = edit;
+    edit.show = true;
+    edit.clicked = function () {
+        edit.show = !edit.show;
+    }
 
 
 
@@ -48,7 +53,15 @@ app.controller('mainController', function ($scope, beerFactory) {
         .then(function (beers) {
             for (var i = 0; i < beers.length; i++) {
                 beers[i].average = avgRating(beers[i]);
+                beers[i].edit = {
+                show: true,
+                clicked: function () {
+                    this.show = !this.show;
+                }
             }
+
+            }
+            
             $scope.beers = beers;
         }).catch(function (error) {
             console.log(error)

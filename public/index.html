@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="col-md-4 beer-box" ng-repeat="beer in beers | orderBy: order.type">
-                <section>
+                <section class="show beer" ng-show="beer.edit.show">
                     <div class="page-header">
                     </div>
                     <div class="row">
@@ -64,10 +64,11 @@
                         </div>
                         <div class="col-md-4">
                             <h3>{{beer.name}}, <small>{{beer.style}}</small></h3>
-                            <small>{{beer.abv}}%</small>
+                            <small>abv:{{beer.abv}}%</small>
                         </div>
                         <div class="col-md-4">
-                            <button type="button" class="btn btn-danger pull-right" ng-click="removeBeer(beer)">Remove </button>
+                            <button type="button" class="btn btn-danger pull-right remove-beer" ng-click="removeBeer(beer)">Remove </button>
+                            <button type="button" class="btn btn-warning pull-right" ng-click="beer.edit.clicked()">Edit Beer </button>
                         </div>
                     </div>
                     <div class="row">
@@ -77,6 +78,9 @@
                         <h5 ng-show="beer.average">Rating: {{beer.average}}</h5>
                         <h5 ng-hide="beer.average">this beer havn't been rated yet</h5>
                     </div>
+                </section>
+                <section class="edit-beer" ng-hide="beer.edit.show">
+                    <button type="button" class="btn btn-warning pull-right" ng-click="beer.edit.clicked()">Edit Beer </button>
                 </section>
             </div>
         </div>
