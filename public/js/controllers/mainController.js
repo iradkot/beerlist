@@ -15,11 +15,18 @@ app.controller('mainController', function ($scope, beerFactory) {
     $scope.addRating = function (id, rating) {
         beerFactory.addRating(id, rating)
             .then(function (beer) {
+                var beer_index;
                 for (var i = 0; i < $scope.beers.length; i++) {
                     if ($scope.beers[i]._id == id) {
                         beer.average = avgRating(beer);
                         $scope.beers[i] = beer;
+                        beer_index=i;
                     }
+                }
+                $scope.beers[beer_index].edit={};
+                $scope.beers[beer_index].edit.show = true;
+                $scope.beers[beer_index].edit.clicked = function () {
+                    this.show = !this.show;
                 }
             })
             .catch(function (error) {
@@ -31,12 +38,13 @@ app.controller('mainController', function ($scope, beerFactory) {
         beerFactory.addBeer(newBeer)
             .then(function (beer) {
                 beer.edit = {
-                show: true,
-                clicked: function () {
-                    this.show = !this.show;
-                }}
+                    show: true,
+                    clicked: function () {
+                        this.show = !this.show;
+                    }
+                }
                 $scope.beers.push(beer);
-                
+
             })
             .catch(function (error) {
                 console.log(error)
@@ -53,21 +61,21 @@ app.controller('mainController', function ($scope, beerFactory) {
                 console.log(error)
             })
     }
-    $scope.updateBeer = function(editedBeer, _id, beer_obj) {
+    $scope.updateBeer = function (editedBeer, _id, beer_obj) {
         beerFactory.updateBeer(editedBeer, _id)
-        .then(function(beer){
-            beer_obj.name = beer.name;
-            beer_obj.abv = beer.abv;
-            beer_obj.style = beer.style;
-            beer_obj.image_url = beer.image_url;
-            beer_obj.edit.clicked();
-            console.log('beer updated');
+            .then(function (beer) {
+                beer_obj.name = beer.name;
+                beer_obj.abv = beer.abv;
+                beer_obj.style = beer.style;
+                beer_obj.image_url = beer.image_url;
+                beer_obj.edit.clicked();
+                console.log('beer updated');
 
-            // $scope.beers.push(beer);
-        })
-        .catch(function(err) {
-            console.log(err);
-        });
+                // $scope.beers.push(beer);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
     }
 
     beerFactory.getBeers()
@@ -75,14 +83,14 @@ app.controller('mainController', function ($scope, beerFactory) {
             for (var i = 0; i < beers.length; i++) {
                 beers[i].average = avgRating(beers[i]);
                 beers[i].edit = {
-                show: true,
-                clicked: function () {
-                    this.show = !this.show;
+                    show: true,
+                    clicked: function () {
+                        this.show = !this.show;
+                    }
                 }
-            }
 
             }
-            
+
             $scope.beers = beers;
         }).catch(function (error) {
             console.log(error)
