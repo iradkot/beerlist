@@ -19,16 +19,22 @@ app.factory('beerFactory', function ($http) {
             });
     }
     var addRating = function (id, rating) {
-        return $http.post('/beers/'+ id + '/ratings', {rating: rating})
+        return $http.post('/beers/' + id + '/ratings', { rating: rating })
             .then(function (response) {
                 return angular.copy(response.data)
             });
     }
+    var updateBeer = function (beer, _id) {
+        return $http.put('/beers/' + _id, beer)
+            .then(function (response) {
+                return response.data
+            });
+    };
     return {
         getBeers: getBeers,
         addRating: addRating,
         addBeer: addBeer,
-        removeBeer: removeBeer
-
+        removeBeer: removeBeer,
+        updateBeer: updateBeer
     }
 });

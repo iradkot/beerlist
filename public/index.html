@@ -85,15 +85,16 @@
                     <div class="row">
                         <div class="col-md-4 rating">
                             <button type="button" class="btn btn-basic" ng-click="beer.edit.clicked()">Back </button>
-                            <form>
+                            <form ng-submit="updateBeer({name: new_name, style: new_style, abv: new_abv, image_url: new_url}, beer._id, beer)">
                                  <label>image url</label>
-                                <textarea rows="3" cols="40" id="cost_text" value="{{beer.image_url}}">{{beer.image_url}}</textarea>
+                                <textarea rows="3" cols="40" id="cost_text" ng-value="beer.image_url" ng-model="new_url">{{beer.image_url}}</textarea>
                                 <label>name</label>
-                                <input type="text" value="{{beer.name}}">
+                                <input type="text" ng-value="beer.name" ng-model="new_name">
                                 <label>style</label>
-                                <input type="text" value="{{beer.style}}">
+                                <input type="text" ng-value="beer.style" ng-model="new_style">
                                 <label>abv</label>
-                                <input type="text" value="{{beer.abv}}">
+                                <input type="text" ng-value="beer.abv" ng-model="new_abv">
+                                <button type="submit" class="btn btn-success submit-edit">Submit </button>
                             </form>
                         </div>
                     </div>

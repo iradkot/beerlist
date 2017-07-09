@@ -30,7 +30,13 @@ app.controller('mainController', function ($scope, beerFactory) {
     $scope.addBeer = function (newBeer) {
         beerFactory.addBeer(newBeer)
             .then(function (beer) {
+                beer.edit = {
+                show: true,
+                clicked: function () {
+                    this.show = !this.show;
+                }}
                 $scope.beers.push(beer);
+                
             })
             .catch(function (error) {
                 console.log(error)
@@ -47,7 +53,22 @@ app.controller('mainController', function ($scope, beerFactory) {
                 console.log(error)
             })
     }
+    $scope.updateBeer = function(editedBeer, _id, beer_obj) {
+        beerFactory.updateBeer(editedBeer, _id)
+        .then(function(beer){
+            beer_obj.name = beer.name;
+            beer_obj.abv = beer.abv;
+            beer_obj.style = beer.style;
+            beer_obj.image_url = beer.image_url;
+            beer_obj.edit.clicked();
+            console.log('beer updated');
 
+            // $scope.beers.push(beer);
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+    }
 
     beerFactory.getBeers()
         .then(function (beers) {

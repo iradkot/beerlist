@@ -71,8 +71,9 @@ app.post('/beers/:id/ratings', function(req, res, next) {
 });
 
 app.put('/beers/:id', function(req, res, next) {
-  console.log(req.body);
-  Beer.findByIdAndUpdate(req.params.id, {$set: {name: req.body.name}}, {new: true}, function(err, beer) {
+  var updated_obj = req.body;
+  console.log(updated_obj);
+  Beer.findByIdAndUpdate(req.params.id, {$set: updated_obj}, {new: true}, function(err, beer) {
     if (err) {
       return next(err);
     } else {
