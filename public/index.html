@@ -47,7 +47,7 @@
                     <div class="row">
                         <div class="col-md-4 rating">
                             <div class="row">
-                                <!--Star Rating start-->
+                                <!-- Rating start-->
                                 <select ng-model="rating">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -56,12 +56,13 @@
                                     <option value="5">5</option>
                                 </select>
 
-                                <!--Star Rating end-->
+                                <!-- Rating end-->
                             </div>
                             <div class="row">
                                 <button class="btn-primary" ng-click="addRating(beer._id, rating)">Add rating </button>
                             </div>
                         </div>
+                        <!--Beer info start-->
                         <div class="col-md-4">
                             <h3>{{beer.name}}, <small>{{beer.style}}</small></h3>
                             <small>abv:{{beer.abv}}%</small>
@@ -76,8 +77,10 @@
                     </div>
                     <div class="row">
                         <h5 ng-show="beer.average">Rating: {{beer.average}}</h5>
-                        <h5 ng-hide="beer.average">this beer havn't been rated yet</h5>
+                        <h5 ng-hide="beer.average">this beer hasn't been rated yet</h5>
                     </div>
+                    <!--Beer inf end-->
+                    <button type="button" class="btn-success" ng-click="beer.showComments = !beer.showComments">Comments ({{beer.reviews.length}}) </button>
                 </section>
                 <section class="edit-beer" ng-hide="beer.edit.show">
                     <div class="page-header">
@@ -86,7 +89,7 @@
                         <div class="col-md-4 rating">
                             <button type="button" class="btn btn-basic" ng-click="beer.edit.clicked()">Back </button>
                             <form ng-submit="updateBeer({name: new_name, style: new_style, abv: new_abv, image_url: new_url}, beer._id, beer)">
-                                 <label>image url</label>
+                                <label>image url</label>
                                 <textarea rows="3" cols="40" id="cost_text" ng-value="beer.image_url" ng-model="new_url">{{beer.image_url}}</textarea>
                                 <label>name</label>
                                 <input type="text" ng-value="beer.name" ng-model="new_name">
@@ -99,13 +102,56 @@
                         </div>
                     </div>
                 </section>
-            </div>
-        </div>
-    </div>
-    <script src="angular/angular.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/services/beerFactory.js"></script>
-    <script src="js/controllers/mainController.js"></script>
+                <section class="beer_comments" ng-show="beer.showComments">
+                    <div class="row">
+                        <div class="test">
+                            <button type="button" class="btn-secondry pull-right" ng-click="beer.showComments = !beer.showComments">back</button>
+                            <div class="row">
+                                <div class="col-md-5 col-md-offset-1 focus-beer">
+                                    <h3>name = {{beer.name}}</h3>
+                                    <h4>style = {{beer.style}}</h4>
+                                    <h4>abv = {{beer.abv}}%</h4>
+                                    <h4 ng-show="beer.average">Average rating = {{beer.average}}</h4>
+                                    <h4 ng-hide="beer.average">this beer has't been rated yet</h4>
+                                    <img class="beerImages" ng-src="{{beer.image_url}}">
+                                </div>
+                                <div class="col-md-6">
+                                    <h1>Comments:</h1>
+                                    <ul>
+                                        <li>Best beer ever! </li>
+                                        <li ng-repeat="review in beer.reviews">
+                                            <h5>comment: {{review.comment}}</h5>
+                                            <h6>by user: {{review.userName}} </h6>
+                                        </li>
+                                    </ul>
+                                    <div>
+
+
+                                    </div>
+
+                                    <!--<ul>-->
+                                    <!--<li ng-repeat="review in beer.reviews"><strong>{{review.userName}}</strong>: {{review.comment}} <button type="submit" class="btn btn-xs btn-danger pull-right">delete </button></li>-->
+                                    <!--</ul>-->
+                                    <!--<button class="btn-primary center-block" type="submit">add-comment</button>-->
+                                    <!--<form class="form-inline">
+                        <label>Name</label>
+                        <input class="add-comment">
+                        <label>comment</label>
+                        <input class="add-comment">
+                        <button class="btn-primary" type="submit">add-comment</button>
+
+                    </form>-->
+                                </div>
+                </section>
+                </div>
+                </div>
+                </div>
+                <script src="angular/angular.js"></script>
+                <script src="@uirouter/core/_bundles/ui-router-core.js"></script>
+                <script src="@uirouter/angularjs/release/ui-router-angularjs.js"></script>
+                <script src="js/app.js"></script>
+                <script src="js/services/beerFactory.js"></script>
+                <script src="js/controllers/mainController.js"></script>
 </body>
 
 </html>

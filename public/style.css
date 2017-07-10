@@ -12,3 +12,29 @@ select {
 .remove-beer {
     width: 83px
 }
+.beer_comments {
+    text-align: left;
+}
+.beer_comments .btn-xs {
+    height: 20px;
+}
+.test {
+    border: 2px solid purple;
+ width:500px;
+ height:500px;
+ margin:0 auto;
+ background:#f7f7f7;
+ position:fixed;
+ left:50%;
+ top:50%;
+ z-index: 100;
+ margin-left:-250px;
+ margin-top:-250px;
+}
+.focus-beer {
+    text-align: center;
+}
+section.show.beer {
+    height: 447px;
+    margin-top: 64px;
+}

@@ -60,20 +60,6 @@ app.delete('/beers/:id', function (req, res, next) {
 });
 
 
-/// adds rating
-app.post('/beers/:id/ratings', function (req, res, next) {
-  //code a suitable update object 
-  //using req.body to retrieve the new rating
-  var updateObject = { $push: { ratings: req.body.rating } };
-
-  Beer.findByIdAndUpdate(req.params.id, updateObject, { new: true }, function (err, beer) {
-    if (err) {
-      return next(err);
-    } else {
-      res.send(beer);
-    }
-  });
-});
 
 /// update a beer
 
@@ -89,7 +75,25 @@ app.put('/beers/:id', function (req, res, next) {
   });
 });
 
-//// add reviews
+/// adds rating
+app.post('/beers/:id/ratings', function (req, res, next) {
+  //code a suitable update object 
+  //using req.body to retrieve the new rating
+  var updateObject = { $push: { ratings: req.body.rating } };
+
+  Beer.findByIdAndUpdate(req.params.id, updateObject, { new: true }, function (err, beer) {
+    if (err) {
+      return next(err);
+    } else {
+      res.send(beer);
+    }
+  });
+});
+
+
+///// Reviews section! ////
+
+//// add a review
 app.post('/beers/:id/reviews', function (req, res, next) {
   var updatedReviews = { $push: { reviews: req.body } };
   var id = req.params.id;
@@ -102,30 +106,42 @@ app.post('/beers/:id/reviews', function (req, res, next) {
   });
 });
 
+/// delete a review
 
-
-
-///////////////////error handlingg //////////////////////////////////////////////////////////////////////
-
-// error handler to catch 404 and forward to main error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// main error handler
-// warning - not for use in production code!
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.send({
-    message: err.message,
-    error: err
+app.delete('/beers/:beerId/:reviewId', function (req, res, next) {
+  var beer_id = req.params.beerId;
+  var review_id = req.params.reviewId;
+  var delete_review = { $pull: { reviews: { _id: review_id } } };
+  Beer.findByIdAndUpdate(beer_id, delete_review, { new: true }, function (err, foundBeer) {
+    if (err) {
+      return next(err);
+    } else {
+      res.send(foundBeer);
+    }
   });
 });
-///// listen..
 
-app.listen(8000, function () {
-  console.log("yo yo yo, on 8000!!")
-});
+  ///////////////////error handlingg //////////////////////////////////////////////////////////////////////
+
+  // error handler to catch 404 and forward to main error handler
+  app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+  });
+
+  // main error handler
+  // warning - not for use in production code!
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.send({
+      message: err.message,
+      error: err
+    });
+  });
+  ///// listen..
+
+  app.listen(8000, function () {
+    console.log("yo yo yo, on 8000!!")
+  });
 

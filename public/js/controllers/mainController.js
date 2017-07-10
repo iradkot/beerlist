@@ -81,14 +81,17 @@ app.controller('mainController', function ($scope, beerFactory) {
     beerFactory.getBeers()
         .then(function (beers) {
             for (var i = 0; i < beers.length; i++) {
+                //adding average
                 beers[i].average = avgRating(beers[i]);
+                //adding edit obj, that shows and hide the edit view
                 beers[i].edit = {
                     show: true,
                     clicked: function () {
                         this.show = !this.show;
                     }
                 }
-
+                // adding comments section to the beer
+                beers[i].showComments=false;
             }
 
             $scope.beers = beers;
