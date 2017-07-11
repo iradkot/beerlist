@@ -20,10 +20,10 @@ app.controller('mainController', function ($scope, beerFactory) {
                     if ($scope.beers[i]._id == id) {
                         beer.average = avgRating(beer);
                         $scope.beers[i] = beer;
-                        beer_index=i;
+                        beer_index = i;
                     }
                 }
-                $scope.beers[beer_index].edit={};
+                $scope.beers[beer_index].edit = {};
                 $scope.beers[beer_index].edit.show = true;
                 $scope.beers[beer_index].edit.clicked = function () {
                     this.show = !this.show;
@@ -61,6 +61,20 @@ app.controller('mainController', function ($scope, beerFactory) {
                 console.log(error)
             })
     }
+    $scope.addComment = function(_id, userName, comment) {
+        beerFactory.addComment(_id, userName, comment)
+        .then(function(beer){
+            $scope.beers[findIndexByNameAndStyle(beer.name, beer.style)].reviews = beer.reviews;
+        })
+    }
+    $scope.removeComment = function(beer_id, review_id) {
+        beerFactory.removeComment(beer_id, review_id)
+        .then(function(beer){
+            var beer_index = findIndexById(beer_id, $scope.beers);
+            var review_index = findIndexById(review_id, $scope.beers[beer_index].reviews);
+            $scope.beers[beer_index].reviews.splice(review_index, 1);
+        })
+    }
     $scope.updateBeer = function (editedBeer, _id, beer_obj) {
         beerFactory.updateBeer(editedBeer, _id)
             .then(function (beer) {
@@ -91,16 +105,28 @@ app.controller('mainController', function ($scope, beerFactory) {
                     }
                 }
                 // adding comments section to the beer
-                beers[i].showComments=false;
+                beers[i].showComments = false;
             }
 
             $scope.beers = beers;
         }).catch(function (error) {
             console.log(error)
         });
+    
+
 
 
     /////////////////helper functions
+    var findIndexById = function(id, arr) {
+        for (var index = 0; index < arr.length; index++) {
+            if(arr[index]._id === id){
+                return index;
+            }
+            
+        }
+        return -1;
+    }
+
     var findIndexByNameAndStyle = function (name, style) {
         for (var i = 0; i < $scope.beers.length; i++) {
             if (($scope.beers[i].name === name) & ($scope.beers[i].style === style)) {

@@ -118,11 +118,25 @@
                                 <div class="col-md-6">
                                     <h1>Comments:</h1>
                                     <ul>
-                                        <li>Best beer ever! </li>
                                         <li ng-repeat="review in beer.reviews">
                                             <h5>comment: {{review.comment}}</h5>
-                                            <h6>by user: {{review.userName}} </h6>
+                                            <h6>by user: {{review.userName}}
+                                                <button type="submit" class="btn btn-xs btn-danger pull-right" ng-click="removeComment(beer._id, review._id)">
+                                                    delete
+                                                </button> 
+                                            </h6>
+
                                         </li>
+                                        <form ng-submit="addComment(beer._id, userName, comment)">
+                                            <label>name</label>
+                                            <input type="text" value="enter name" ng-model="userName">
+                                            <label>comment</label>
+                                            <input type="text" value="enter comment" ng-model="comment">
+                                            <br><br>
+                                            <button type="submit" class="btn-success">add-comment</button>
+
+                                        </form>
+
                                     </ul>
                                     <div>
 
