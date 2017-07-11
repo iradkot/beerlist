@@ -1,127 +1,54 @@
 var express = require('express');
 var bodyParser = require('body-parser')
-
 var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var expressSession = require('express-session');
+var beerRoutes = require('./routes/beerRoutes');
+var userRoutes = require('./routes/userRoutes');
+var User = require("./models/UserModel");
+
 
 mongoose.connect('mongodb://localhost/beers');
-
 var app = express();
-
-var Beer = require('./beerModel.js');
-
-var beers = [{ name: '512 IPA', style: 'IPA', image_url: 'http://bit.ly/1XtmB4d', abv: 5 },
-{ name: '512 Pecan Porter', style: 'Porter', image_url: 'http://bit.ly/1Vk5xj4', abv: 4 }];
-
 
 app.use(express.static('public'));
 app.use(express.static('node_modules'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Configure passport and session middleware
+app.use(expressSession({
+    secret: 'yourSecretHere',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-// Handles Success / Failure , and Returns data
-var handler = function (res, next) {
-  return function (err, data) {
-    if (err) {
-      return next(err);
-    }
-    res.send(data);
-  }
-};
-///////////////////////////////////////////////////////////////////////////////////////////////
-//get\post\put etc..
-
-
-/// get the beers
-app.get('/beers', function (req, res, next) {
-  Beer.find(handler(res, next));
-});
-
-/// add beers 
-app.post('/beers', function (req, res, next) {
-  Beer.create(req.body, function (err, beer) {
-    if (err) {
-      return next(err);
-    } else {
-      return res.send(beer);
-    }
-  });
-});
-
-/// delete beer by id
-app.delete('/beers/:id', function (req, res, next) {
-  Beer.findByIdAndRemove(req.params.id, function (err, beer) {
-    if (err) {
-      return next(err);
-    } else {
-      res.send(beer);
-    }
-  });
-});
+// Configure passport-local to use user model for authentication
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
-
-/// update a beer
-
-app.put('/beers/:id', function (req, res, next) {
-  var updated_obj = req.body;
-  console.log(updated_obj);
-  Beer.findByIdAndUpdate(req.params.id, { $set: updated_obj }, { new: true }, function (err, beer) {
-    if (err) {
-      return next(err);
-    } else {
-      res.send(beer);
-    }
-  });
-});
-
-/// adds rating
-app.post('/beers/:id/ratings', function (req, res, next) {
-  //code a suitable update object 
-  //using req.body to retrieve the new rating
-  var updateObject = { $push: { ratings: req.body.rating } };
-
-  Beer.findByIdAndUpdate(req.params.id, updateObject, { new: true }, function (err, beer) {
-    if (err) {
-      return next(err);
-    } else {
-      res.send(beer);
-    }
-  });
-});
-
-
-///// Reviews section! ////
-
-//// add a review
-app.post('/beers/:id/reviews', function (req, res, next) {
-  var updatedReviews = { $push: { reviews: req.body } };
-  var id = req.params.id;
-  Beer.findByIdAndUpdate(id, updatedReviews, { new: true }, function (err, review) {
-    if (err) {
-      return next(err);
-    } else {
-      res.send(review);
-    }
-  });
-});
-
-/// delete a review
-
-app.delete('/beers/:beerId/:reviewId', function (req, res, next) {
-  var beer_id = req.params.beerId;
-  var review_id = req.params.reviewId;
-  var delete_review = { $pull: { reviews: { _id: review_id } } };
-  Beer.findByIdAndUpdate(beer_id, delete_review, { new: true }, function (err, foundBeer) {
-    if (err) {
-      return next(err);
-    } else {
-      res.send(foundBeer);
-    }
-  });
-});
+//This tells the server that when a request comes into '/beers'
+//that it should use the routes in 'beerRoutes'
+//and those are in our new beerRoutes.js file
+app.use('/beers', beerRoutes);
+app.use('/users', userRoutes);
 
   ///////////////////error handlingg //////////////////////////////////////////////////////////////////////
+//this below route will make sure index.html is served
+//for any unhandled routes
+//this allows html5 mode to be used
+//notice the '[^.]+' this is a regular expression
+//it is there so that requests to files that are not found 
+//are not served by this route
+//instead they will be given a 404 error
+app.all('[^.]+', function(req, res) {
+  res.sendFile(__dirname + "/public/index.html");
+});
 
   // error handler to catch 404 and forward to main error handler
   app.use(function (req, res, next) {
