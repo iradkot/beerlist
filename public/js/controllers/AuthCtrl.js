@@ -7,4 +7,12 @@ app.controller('AuthCtrl', function($scope, authFactory, $state) {
         alert(err.data.message);
       });
   }
+  $scope.login = function() {
+    authFactory.login($scope.user)
+      .then(function() {
+        $state.go('home');
+      }, function(err) {
+        alert(err.data);
+      });
+  }
 });

@@ -4,32 +4,36 @@
     <base href="/">
     <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
-    
+
 </head>
 
 <body ng-app="beerList">
-    <nav class="navbar navbar-inverse" role="navigation">
-        <div class="navbar-header">
-            <a class="navbar-brand" ui-sref="home">BeerList home</a>
+    <div class="container" ng-controller="masterController">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" ui-sref="home">BeerList home</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <a class="navbar-brand" ui-sref="login">Login!</a>
+                <a class="navbar-brand" ui-sref="register">Register!</a>
+            </ul>
+            <p class="navbar-text">{{currentUser.username}}</p>
+        </nav>
+        <div class="container">
+            <div ui-view></div>
         </div>
-        <ul class="nav navbar-nav">
-            <a class="navbar-brand" ui-sref="login">Login!</a>
-            <a class="navbar-brand" ui-sref="register">Register!</a>
-        </ul>
-    </nav>
-    <div class="container">
-        <div ui-view></div>
     </div>
 
-                <script src="angular/angular.js"></script>
-                <script src="@uirouter/core/_bundles/ui-router-core.js"></script>
-                <script src="@uirouter/angularjs/release/ui-router-angularjs.js"></script>
-                <script src="js/app.js"></script>
-                <script src="js/services/beerFactory.js"></script>
-                <script src="js/controllers/mainController.js"></script>
-                <script src="js/services/authFactory.js"></script>
-                <script src="js/controllers/AuthCtrl.js"></script>
-                
+    <script src="angular/angular.js"></script>
+    <script src="@uirouter/core/_bundles/ui-router-core.js"></script>
+    <script src="@uirouter/angularjs/release/ui-router-angularjs.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/services/beerFactory.js"></script>
+    <script src="js/controllers/mainController.js"></script>
+    <script src="js/services/authFactory.js"></script>
+    <script src="js/controllers/AuthCtrl.js"></script>
+    <script src="js/controllers/masterController.js"></script>
+
 </body>
 
 </html>
