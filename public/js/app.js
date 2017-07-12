@@ -1,5 +1,5 @@
 var app = angular.module('beerList', ['ui.router']);
-app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider','$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $stateProvider
         .state('home', {
             url: '/home',
@@ -13,6 +13,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: '/templates/register.html',
             controller: 'AuthCtrl'
         })
-
+    $locationProvider.html5Mode(true);
     $urlRouterProvider.otherwise('/home');
 }]);

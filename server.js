@@ -66,6 +66,10 @@ app.use(function (err, req, res, next) {
     error: err
   });
 });
+
+app.all('*', function(req, res) {
+  res.sendFile(__dirname + "/public/index.html")
+})
 ///// listen..
 
 app.listen(8000, function () {

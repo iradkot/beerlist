@@ -1,5 +1,7 @@
-app.factory('authFactory', function() {
+app.factory('authFactory', function($http) {
   var auth = {};
-  auth.register = function(user) {};
+  auth.register = function(user) {
+    return $http.post('/users/register', user);
+  };
   return auth;
 });

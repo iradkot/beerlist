@@ -27,7 +27,7 @@ router.post('/register', function(req, res, next) {
       if (err) {
         return next(err);
       }
-      res.send(req.user);
+     res.send({ username: req.user.username });
     });
   });
 });
@@ -36,7 +36,7 @@ router.post('/register', function(req, res, next) {
 router.post('/login', passport.authenticate('local'), function(req, res) {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-  res.send(req.user.username)
+  res.send({ username: req.user.username });
 });
 
 //logout
