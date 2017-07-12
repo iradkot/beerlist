@@ -6,160 +6,19 @@
 </head>
 
 <body ng-app="beerList">
-    <div class="container" ng-controller="mainController">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <h1 class="text-center">BeerList</h1>
-                <div class="page-header">
-                </div>
-                <!-- render beers here -->
-                <form ng-submit="addBeer({name: name, style: style, abv: abv, image_url: image})">
-                    <h3>Add a new beer</h3>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Beer Name" ng-model="name"></input>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Style" ng-model="style"></input>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="ABV" ng-model="abv"></input>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Image URL" ng-model="image"></input>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </form>
-                <div>
-                    <div class="page-header">
-                    </div>
-                    <h4>Sort by: {{order.type}}</h4>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary" ng-click="order.type==='name'? order.type = '-name': order.type = 'name'">name</button>
-                        <button type="button" class="btn btn-primary" ng-click="order.type==='average'? order.type='-average': order.type='average'">rating</button>
-                        <button type="button" class="btn btn-primary" ng-click="order.type==='abv'? order.type='-abv': order.type='abv'">ABV</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 beer-box" ng-repeat="beer in beers | orderBy: order.type">
-                <section class="show beer" ng-show="beer.edit.show">
-                    <div class="page-header">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 rating">
-                            <div class="row">
-                                <!-- Rating start-->
-                                <select ng-model="rating">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" ui-sref="home">BeerList home</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <a class="navbar-brand" ui-sref="login">Login!</a>
+            <a class="navbar-brand" ui-sref="register">Register!</a>
+        </ul>
+    </nav>
+    <div class="container">
+        <div ui-view></div>
+    </div>
 
-                                <!-- Rating end-->
-                            </div>
-                            <div class="row">
-                                <button class="btn-primary" ng-click="addRating(beer._id, rating)">Add rating </button>
-                            </div>
-                        </div>
-                        <!--Beer info start-->
-                        <div class="col-md-4">
-                            <h3>{{beer.name}}, <small>{{beer.style}}</small></h3>
-                            <small>abv:{{beer.abv}}%</small>
-                        </div>
-                        <div class="col-md-4">
-                            <button type="button" class="btn btn-danger pull-right remove-beer" ng-click="removeBeer(beer)">Remove </button>
-                            <button type="button" class="btn btn-warning pull-right" ng-click="beer.edit.clicked()">Edit Beer </button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <img class="beerImages" ng-src="{{beer.image_url}}">
-                    </div>
-                    <div class="row">
-                        <h5 ng-show="beer.average">Rating: {{beer.average}}</h5>
-                        <h5 ng-hide="beer.average">this beer hasn't been rated yet</h5>
-                    </div>
-                    <!--Beer inf end-->
-                    <button type="button" class="btn-success" ng-click="beer.showComments = !beer.showComments">Comments ({{beer.reviews.length}}) </button>
-                </section>
-                <section class="edit-beer" ng-hide="beer.edit.show">
-                    <div class="page-header">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 rating">
-                            <button type="button" class="btn btn-basic" ng-click="beer.edit.clicked()">Back </button>
-                            <form ng-submit="updateBeer({name: new_name, style: new_style, abv: new_abv, image_url: new_url}, beer._id, beer)">
-                                <label>image url</label>
-                                <textarea rows="3" cols="40" id="cost_text" ng-value="beer.image_url" ng-model="new_url">{{beer.image_url}}</textarea>
-                                <label>name</label>
-                                <input type="text" ng-value="beer.name" ng-model="new_name">
-                                <label>style</label>
-                                <input type="text" ng-value="beer.style" ng-model="new_style">
-                                <label>abv</label>
-                                <input type="text" ng-value="beer.abv" ng-model="new_abv">
-                                <button type="submit" class="btn btn-success submit-edit">Submit </button>
-                            </form>
-                        </div>
-                    </div>
-                </section>
-                <section class="beer_comments" ng-show="beer.showComments">
-                    <div class="row">
-                        <div class="test">
-                            <button type="button" class="btn-secondry pull-right" ng-click="beer.showComments = !beer.showComments">back</button>
-                            <div class="row">
-                                <div class="col-md-5 col-md-offset-1 focus-beer">
-                                    <h3>name = {{beer.name}}</h3>
-                                    <h4>style = {{beer.style}}</h4>
-                                    <h4>abv = {{beer.abv}}%</h4>
-                                    <h4 ng-show="beer.average">Average rating = {{beer.average}}</h4>
-                                    <h4 ng-hide="beer.average">this beer has't been rated yet</h4>
-                                    <img class="beerImages" ng-src="{{beer.image_url}}">
-                                </div>
-                                <div class="col-md-6">
-                                    <h1>Comments:</h1>
-                                    <ul>
-                                        <li ng-repeat="review in beer.reviews">
-                                            <h5>comment: {{review.comment}}</h5>
-                                            <h6>by user: {{review.userName}}
-                                                <button type="submit" class="btn btn-xs btn-danger pull-right" ng-click="removeComment(beer._id, review._id)">
-                                                    delete
-                                                </button> 
-                                            </h6>
-
-                                        </li>
-                                        <form ng-submit="addComment(beer._id, userName, comment)">
-                                            <label>name</label>
-                                            <input type="text" value="enter name" ng-model="userName">
-                                            <label>comment</label>
-                                            <input type="text" value="enter comment" ng-model="comment">
-                                            <br><br>
-                                            <button type="submit" class="btn-success">add-comment</button>
-
-                                        </form>
-
-                                    </ul>
-                                    <div>
-
-
-                                    </div>
-
-                                    <!--<ul>-->
-                                    <!--<li ng-repeat="review in beer.reviews"><strong>{{review.userName}}</strong>: {{review.comment}} <button type="submit" class="btn btn-xs btn-danger pull-right">delete </button></li>-->
-                                    <!--</ul>-->
-                                    <!--<button class="btn-primary center-block" type="submit">add-comment</button>-->
-                                    <!--<form class="form-inline">
-                        <label>Name</label>
-                        <input class="add-comment">
-                        <label>comment</label>
-                        <input class="add-comment">
-                        <button class="btn-primary" type="submit">add-comment</button>
-
-                    </form>-->
-                                </div>
-                </section>
-                </div>
-                </div>
-                </div>
                 <script src="angular/angular.js"></script>
                 <script src="@uirouter/core/_bundles/ui-router-core.js"></script>
                 <script src="@uirouter/angularjs/release/ui-router-angularjs.js"></script>

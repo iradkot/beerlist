@@ -19,9 +19,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Configure passport and session middleware
 app.use(expressSession({
-    secret: 'yourSecretHere',
-    resave: false,
-    saveUninitialized: false
+  secret: 'yourSecretHere',
+  resave: false,
+  saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -38,7 +38,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use('/beers', beerRoutes);
 app.use('/users', userRoutes);
 
-  ///////////////////error handlingg //////////////////////////////////////////////////////////////////////
+///////////////////error handlingg //////////////////////////////////////////////////////////////////////
 //this below route will make sure index.html is served
 //for any unhandled routes
 //this allows html5 mode to be used
@@ -46,29 +46,29 @@ app.use('/users', userRoutes);
 //it is there so that requests to files that are not found 
 //are not served by this route
 //instead they will be given a 404 error
-app.all('[^.]+', function(req, res) {
+app.all('[^.]+', function (req, res) {
   res.sendFile(__dirname + "/public/index.html");
 });
 
-  // error handler to catch 404 and forward to main error handler
-  app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  });
+// error handler to catch 404 and forward to main error handler
+app.use(function (req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
-  // main error handler
-  // warning - not for use in production code!
-  app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.send({
-      message: err.message,
-      error: err
-    });
+// main error handler
+// warning - not for use in production code!
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.send({
+    message: err.message,
+    error: err
   });
-  ///// listen..
+});
+///// listen..
 
-  app.listen(8000, function () {
-    console.log("yo yo yo, on 8000!!")
-  });
+app.listen(8000, function () {
+  console.log("yo yo yo, on 8000!!")
+});
 
