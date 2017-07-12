@@ -5,7 +5,7 @@
             <div class="page-header">
             </div>
             <!-- render beers here -->
-            <form ng-submit="addBeer({name: name, style: style, abv: abv, image_url: image})">
+            <form ng-show="currentUser.username" ng-submit="addBeer({name: name, style: style, abv: abv, image_url: image})">
                 <h3>Add a new beer</h3>
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Beer Name" ng-model="name"></input>
@@ -40,7 +40,7 @@
                     <div class="col-md-4 rating">
                         <div class="row">
                             <!-- Rating start-->
-                            <select ng-model="rating">
+                            <select ng-show="currentUser.username" ng-model="rating">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -51,7 +51,7 @@
                             <!-- Rating end-->
                         </div>
                         <div class="row">
-                            <button class="btn-primary" ng-click="addRating(beer._id, rating)">Add rating </button>
+                            <button ng-show="currentUser.username" class="btn-primary" ng-click="addRating(beer._id, rating)">Add rating </button>
                         </div>
                     </div>
                     <!--Beer info start-->
@@ -60,8 +60,8 @@
                         <small>abv:{{beer.abv}}%</small>
                     </div>
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-danger pull-right remove-beer" ng-click="removeBeer(beer)">Remove </button>
-                        <button type="button" class="btn btn-warning pull-right" ng-click="beer.edit.clicked()">Edit Beer </button>
+                        <button type="button" ng-show="currentUser.username" class="btn btn-danger pull-right remove-beer" ng-click="removeBeer(beer)">Remove </button>
+                        <button type="button" ng-show="currentUser.username" class="btn btn-warning pull-right" ng-click="beer.edit.clicked()">Edit Beer </button>
                     </div>
                 </div>
                 <div class="row">
@@ -96,6 +96,9 @@
             </section>
             <section class="beer_comments" ng-show="beer.showComments">
                 <div class="row">
+                    <div class = "comments-background">
+                        
+                    </div>
                     <div class="test">
                         <button type="button" class="btn-secondry pull-right" ng-click="beer.showComments = !beer.showComments">back</button>
                         <div class="row">
@@ -113,15 +116,13 @@
                                     <li ng-repeat="review in beer.reviews">
                                         <h5>comment: {{review.comment}}</h5>
                                         <h6>by user: {{review.userName}}
-                                            <button type="submit" class="btn btn-xs btn-danger pull-right" ng-click="removeComment(beer._id, review._id)">
+                                            <button ng-show="currentUser.username" type="submit" class="btn btn-xs btn-danger pull-right" ng-click="removeComment(beer._id, review._id)">
                                                     delete
                                                 </button>
                                         </h6>
 
                                     </li>
-                                    <form ng-submit="addComment(beer._id, userName, comment)">
-                                        <label>name</label>
-                                        <input type="text" value="enter name" ng-model="userName">
+                                    <form ng-show="currentUser.username" ng-submit="addComment(beer._id, currentUser.username, comment)">
                                         <label>comment</label>
                                         <input type="text" value="enter comment" ng-model="comment">
                                         <br><br>

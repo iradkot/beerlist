@@ -14,10 +14,11 @@
                 <a class="navbar-brand" ui-sref="home">BeerList home</a>
             </div>
             <ul class="nav navbar-nav">
-                <a class="navbar-brand" ui-sref="login">Login!</a>
-                <a class="navbar-brand" ui-sref="register">Register!</a>
+                <a type="button" ui-sref="login" ng-hide="currentUser.username" class="btn btn-default navbar-btn">Log In</a>
+                <a type="button" ui-sref="register" ng-hide="currentUser.username" class="btn btn-default navbar-btn">Register</a>
             </ul>
-            <p class="navbar-text">{{currentUser.username}}</p>
+            <p class="navbar-text pull-right">{{currentUser.username}}</p>
+            <button type="button" ng-show="currentUser.username" ng-click="logout()" class="btn btn-default navbar-btn pull-right">Log Out</button>
         </nav>
         <div class="container">
             <div ui-view></div>

@@ -22,7 +22,14 @@ app.factory('authFactory', function ($http) {
             .then(function (response) {
                 auth.currentUser.username = response.data.username;
             });;
-    }
+    };
+    auth.logout = function (user) {
+        return $http.get('/users/logout')
+            .then(function (response) {
+                auth.currentUser.username = null;
+                alert("You logged out!");
+            });
+    };
 
     return auth;
 });

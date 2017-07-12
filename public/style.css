@@ -36,5 +36,15 @@ select {
 }
 section.show.beer {
     height: 447px;
-    margin-top: 64px;
+    margin-top: 32px;
+    margin-bottom: 32px;
 }
+/*.comments-background {
+    left:50%;
+ top:50%;
+    width: 500px;
+    height: 500px;
+    z-index: 99;
+    background-color: black;
+    position:fixed;
+}*/

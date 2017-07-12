@@ -11,9 +11,19 @@ var handler = function (res, next) {
     res.send(data);
   }
 };
+
+////ensure authenticated
+
+var ensureAuthenticated = function(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    return res.status('401').send({message: "Unauthorized" });
+  }
+};
+
 //the beer routes go here
 //get\post\put etc..
-
 
 /// get the beers
 router.get('/', function (req, res, next) {
@@ -21,7 +31,7 @@ router.get('/', function (req, res, next) {
 });
 
 /// add beers 
-router.post('/', function (req, res, next) {
+router.post('/', ensureAuthenticated, function (req, res, next) {
   Beer.create(req.body, function (err, beer) {
     if (err) {
       return next(err);
@@ -32,7 +42,7 @@ router.post('/', function (req, res, next) {
 });
 
 /// delete beer by id
-router.delete('/:id', function (req, res, next) {
+router.delete('/:id', ensureAuthenticated, function (req, res, next) {
   Beer.findByIdAndRemove(req.params.id, function (err, beer) {
     if (err) {
       return next(err);
@@ -46,7 +56,7 @@ router.delete('/:id', function (req, res, next) {
 
 /// update a beer
 
-router.put('/:id', function (req, res, next) {
+router.put('/:id', ensureAuthenticated, function (req, res, next) {
   var updated_obj = req.body;
   console.log(updated_obj);
   Beer.findByIdAndUpdate(req.params.id, { $set: updated_obj }, { new: true }, function (err, beer) {
@@ -59,7 +69,7 @@ router.put('/:id', function (req, res, next) {
 });
 
 /// adds rating
-router.post('/:id/ratings', function (req, res, next) {
+router.post('/:id/ratings', ensureAuthenticated, function (req, res, next) {
   //code a suitable update object 
   //using req.body to retrieve the new rating
   var updateObject = { $push: { ratings: req.body.rating } };
@@ -77,7 +87,7 @@ router.post('/:id/ratings', function (req, res, next) {
 ///// Reviews section! ////
 
 //// add a review
-router.post('/:id/reviews', function (req, res, next) {
+router.post('/:id/reviews', ensureAuthenticated, function (req, res, next) {
   var updatedReviews = { $push: { reviews: req.body } };
   var id = req.params.id;
   Beer.findByIdAndUpdate(id, updatedReviews, { new: true }, function (err, review) {
@@ -91,7 +101,7 @@ router.post('/:id/reviews', function (req, res, next) {
 
 /// delete a review
 
-router.delete('/:beerId/:reviewId', function (req, res, next) {
+router.delete('/:beerId/:reviewId', ensureAuthenticated, function (req, res, next) {
   var beer_id = req.params.beerId;
   var review_id = req.params.reviewId;
   var delete_review = { $pull: { reviews: { _id: review_id } } };
